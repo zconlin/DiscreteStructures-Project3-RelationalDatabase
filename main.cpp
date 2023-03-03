@@ -5,144 +5,80 @@
 #include "scanner.h"
 #include "token.h"
 #include "parser.h"
+#include "Scheme.h"
+#include "Tuple.h"
+#include "Relation.h"
 #include <iostream>
 #include <fstream>
 
-int main (int argc, char* argv[]) {
-    ifstream f;
-    f.open(argv[1]);
+// The result of the select should only include tuples where the 'Major' is 'CS'.
 
-    string content((istreambuf_iterator<char>(f)), (istreambuf_iterator<char>()));
+int main() {
 
-    Scanner s = Scanner(content);
-    vector<Token> t = s.scanLoop();
+    vector<string> names = { "ID", "Name", "Major" };
 
-    Parser p = Parser(t);
+    Scheme scheme(names);
 
-    try {
-        DatalogProgram parsedObject = p.datalogProgram();
-        cout << "Success!" << endl;
-        parsedObject.toString();
+    Relation relation("student", scheme);
+
+    vector<string> values[] = {
+            {"'42'", "'Ann'", "'CS'"},
+            {"'32'", "'Bob'", "'CS'"},
+            {"'64'", "'Ned'", "'EE'"},
+            {"'16'", "'Jim'", "'EE'"},
+    };
+
+    for (auto& value : values) {
+        Tuple tuple(value);
+        cout << tuple.toString(scheme) << endl;
+        relation.addTuple(tuple);
     }
-    catch (Token error) {
-        cout << "Failure!" << endl;
-        cout << "  " << error.toString() << endl;
-    }
 
-    return 0;
+    cout << "relation:" << endl;
+    cout << relation.toString();
+
+    Relation result = relation.select(2, "'CS'");
+
+    cout << "select Major='CS' result:" << endl;
+    cout << result.toString();
+
 }
 
-//int main (int argc, char* argv[]) {
-//    ifstream f;
-//    f.open(argv[1]);
+//int main() { // Part 2
+//    vector<string> names = { "ID", "Name", "Major" };
+//    Scheme scheme(names);
+//    Relation relation("student", scheme);
+//    vector<string> values[] = {
+//            {"'42'", "'Ann'", "'CS'"},
+//            {"'32'", "'Bob'", "'CS'"},
+//            {"'64'", "'Ned'", "'EE'"},
+//            {"'16'", "'Jim'", "'EE'"},
+//    };
 //
-//    string content((istreambuf_iterator<char>(f)), (istreambuf_iterator<char>()));
-//
-//    Scanner s = Scanner(content);
-//    vector<Token> t = s.scanLoop();
-//    for (Token token : t) {
-//        cout << token.toString() << endl;
+//    for (auto& value : values) {
+//        Tuple tuple(value);
+//        cout << tuple.toString(scheme) << endl;
+//        relation.addTuple(tuple);
 //    }
-//    cout << "Total Tokens = " << t.size() << "\n";
 //
-//    return 0;
-//}
-
-
-//int main() { // Test scheme with bad input
-//
-//    vector<Token> tokens = {
-//            Token(ID,"Ned",2),
-//            //Token(LEFT_PAREN,"(",2),
-//            Token(ID,"Ted",2),
-//            Token(COMMA,",",2),
-//            Token(ID,"Zed",2),
-//            Token(RIGHT_PAREN,")",2),
-//    };
-//
-//    Parser p = Parser(tokens);
-//    p.scheme();
-//
-//}
-
-//int main() { // Test scheme with valid input
-//
-//    vector<Token> tokens = {
-//            Token(ID,"Ned",2),
-//            Token(LEFT_PAREN,"(",2),
-//            Token(ID,"Ted",2),
-//            Token(COMMA,",",2),
-//            Token(ID,"Zed",2),
-//            Token(RIGHT_PAREN,")",2),
-//    };
-//
-//    Parser p = Parser(tokens);
-//    p.scheme();
-//
-//}
-
-//int main() {
-//
-//    vector<Token> tokens = { //Test idList with valid input
-//            Token(COMMA,",",2),
-//            Token(ID,"Ted",2),
-//            Token(COMMA,",",2),
-//            Token(ID,"Zed",2),
-//            Token(RIGHT_PAREN,")",2),
-//    };
-//
-//    Parser p = Parser(tokens);
-//    p.idList();
-//
-//}
-
-//int main() { //Test idList with bad input
-//
-//    vector<Token> tokens = {
-//            Token(COMMA,",",2),
-//            //Token(ID,"Ted",2),
-//            Token(COMMA,",",2),
-//            Token(ID,"Zed",2),
-//            Token(RIGHT_PAREN,")",2),
-//    };
-//
-//    Parser p = Parser(tokens);
-//    p.idList();
-//
-//}
-
-//int main() { // Test Match Function
-//
-//    vector<Token> tokens = {
-//            Token(ID,"Zac",2),
-//            Token(LEFT_PAREN,"(",2),
-//            Token(RIGHT_PAREN,")",2),
-//    };
-//
-//    Parser p = Parser(tokens);
-//    p.match(ID);
-//    p.match(LEFT_PAREN);
-//    p.match(ID);         // intentional error
-//    p.match(RIGHT_PAREN);
-//
-//}
-
-//int main() { // Start of Lab 2
-//
-//    vector<Token> tokens = {
-//            Token(ID,"Zac",2),
-//            Token(LEFT_PAREN,"(",2),
-//            Token(RIGHT_PAREN,")",2),
-//    };
-//
-//    Parser p = Parser(tokens);
-//    cout << p.tokenType() << endl;
-//    p.advanceToken();
-//    cout << p.tokenType() << endl;
-//    p.advanceToken();
-//    cout << p.tokenType() << endl;
-//    p.throwError();
+//    cout << "relation:" << endl;
+//    cout << relation.toString();
 //
 //}
 
 
+//    int main() { // Part 1
+//        vector<string> names = { "ID", "Name", "Major" };
+//        Scheme scheme(names);
+//        vector<string> values[] = {
+//                {"'42'", "'Ann'", "'CS'"},
+//                {"'32'", "'Bob'", "'CS'"},
+//                {"'64'", "'Ned'", "'EE'"},
+//                {"'16'", "'Jim'", "'EE'"},
+//        };
+//
+//        for (auto& value : values) {
+//            Tuple tuple(value);
+//            cout << tuple.toString(scheme) << endl;
+//        }
+//    }
