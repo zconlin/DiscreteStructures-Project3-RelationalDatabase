@@ -9,14 +9,14 @@
 #include "relation.h"
 
 class Database {
-    database(){}
-    ~database(){}
+    Database(){}
+    ~Database(){}
     map<string, Relation> relations;
 
     string toString()
     {
         string output;
-        for(map<string,relation>::iterator i = relations.begin(); i != relations.end(); i++)
+        for(map<string,Relation>::iterator i = relations.begin(); i != relations.end(); i++)
         {
             output += i->second.toString() + "\n";
         }

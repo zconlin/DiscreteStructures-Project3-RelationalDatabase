@@ -11,9 +11,9 @@
 #include <iostream>
 #include <fstream>
 
-// The result of the select should only include tuples where the 'Major' is 'CS'.
-
-int main() {
+int main() { // Part 3
+    // The result of the select should only include tuples where the 'Major' is 'CS'.
+    // "..\\tests\project3-passoff\20\input21.txt"
 
     vector<string> names = { "ID", "Name", "Major" };
 

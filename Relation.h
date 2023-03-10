@@ -29,6 +29,7 @@ private:
     Scheme scheme;
     set<Tuple> tuples;
 
+
 public:
     Relation(const string &name, const Scheme &scheme)
             : name(name), scheme(scheme) {}
@@ -44,9 +45,11 @@ public:
         return out.str();
     }
 
+    // 2 Types of Select - Narrow down rows
+    // Select type 1 - Passing in a constant (Editor='Smith')
     Relation select(int index, const string &value) const {
         Relation result(name, scheme);
-        // add tuples to the result if they meet the condition
+        // Add tuples to the result if they meet the condition
         for (auto &tuple: tuples) {
             if (tuple.at(index) == value) {
                 result.addTuple(tuple);
@@ -54,5 +57,29 @@ public:
         }
         return result;
     };
+
+    // Select type 2 - Passing in a variable (Author=Editor) -  Only happens if you find a duplicate variable
+
+
+    // Project - Narrow down columns
+    // Will take in a vector of indexes and return a new relation with only those columns
+    // As we go through the tuples, make a new tuple with just those columns,
+    // and that new tuple is what we add to the relation
+
+
+    // Rename - Will take in a scheme and rename the columns of the relation
+    // Create a new scheme where we've changed the names of the columns
+    // Add back in the same tuples into a relation with the new scheme
+    // Then return that new relation
+
+
+    // Evaluate predicate - Mark for Project and Rename
+    //      Go through and do all the selects
+    //      How do you keep track of the variables you've already seen and what columns you saw them in?
+    //      map<string, int> is a good idea, but this alphabetizes them
+    //      Also keep a vector<string> to retain the order we saw them
+    // Keeping track of the first time we see each variable prepares us for Project and Rename, plus type-2 selects.
+    // Project each column that we have saved (not in alphabetical order)
+    // Rename columns to their corresponding variable names
 };
 #endif //CS236PROJECT3_RELATIONALDATABASE_RELATION_H

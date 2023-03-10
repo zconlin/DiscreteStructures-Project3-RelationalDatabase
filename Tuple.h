@@ -15,8 +15,8 @@ public:
     string toString(const Scheme& scheme) const {
         const Tuple& tuple = *this;
         stringstream out;
-        //out << scheme.size();
-        //out << tuple.size();
+        //out << scheme.size(); // Debugging
+        //out << tuple.size(); // Debugging
         out << scheme.at(0);
         out << "=";
         out << tuple.at(0);
