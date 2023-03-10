@@ -12,17 +12,6 @@ class Database {
     Database(){}
     ~Database(){}
     map<string, Relation> relations;
-
-    string toString()
-    {
-        string output;
-        for(map<string,Relation>::iterator i = relations.begin(); i != relations.end(); i++)
-        {
-            output += i->second.toString() + "\n";
-        }
-        return output;
-    }
-
 };
 
 #endif //CS236PROJECT3_RELATIONALDATABASE_DATABASE_H

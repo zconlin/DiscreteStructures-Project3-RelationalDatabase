@@ -1,4 +1,4 @@
-//
+ //
 // Created by zacco on 3/3/2023.
 //
 
@@ -45,7 +45,7 @@ public:
         return out.str();
     }
 
-    // 2 Types of Select - Narrow down rows
+    // 2 Types of Select (narrow down rows)
     // Select type 1 - Passing in a constant (Editor='Smith')
     Relation select(int index, const string &value) const {
         Relation result(name, scheme);
@@ -58,10 +58,10 @@ public:
         return result;
     };
 
-    // Select type 2 - Passing in a variable (Author=Editor) -  Only happens if you find a duplicate variable
+    // Select type 2 - Passing in a variable (Author=Editor) - Only happens if you find a duplicate variable
 
 
-    // Project - Narrow down columns
+    // Project (narrow down columns)
     // Will take in a vector of indexes and return a new relation with only those columns
     // As we go through the tuples, make a new tuple with just those columns,
     // and that new tuple is what we add to the relation
