@@ -27,6 +27,13 @@ public:
 //    void addParameter(vector<Parameter> params) {
 //        parameterList.insert(parameterList.end(),params.begin(), params.end());
 //    }
+    string getName() {
+        return name;
+    };
+
+    vector<Parameter> getParameterList() {
+        return parameterList;
+    }
 
     string toString() {
         stringstream output;

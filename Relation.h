@@ -1,5 +1,5 @@
  //
-// Created by zacco on 3/3/2023.
+// Created by zconlin on 3/3/2023.
 //
 
 #ifndef CS236PROJECT3_RELATIONALDATABASE_RELATION_H
@@ -31,6 +31,7 @@ private:
 
 
 public:
+    Relation() = default;
     Relation(const string &name, const Scheme &scheme)
             : name(name), scheme(scheme) {}
 
@@ -59,18 +60,53 @@ public:
     };
 
     // Select type 2 - Passing in a variable (Author=Editor) - Only happens if you find a duplicate variable
-
+    Relation matchSelect(int index, const string &value) const {
+        Relation result(name, scheme);
+        // TODO
+        return result;
+    };
 
     // Project (narrow down columns)
     // Will take in a vector of indexes and return a new relation with only those columns
     // As we go through the tuples, make a new tuple with just those columns,
     // and that new tuple is what we add to the relation
+    Relation project(const vector<int> &indexes) const {
+        // Create a new scheme with the new column names
+        vector<string> newNames;
+        for (auto &index: indexes) {
+            newNames.push_back(scheme.at(index));
+        }
+        Scheme newScheme(newNames);
+
+        // Create a new relation with the new scheme
+        Relation result(name, newScheme);
+
+        // Add tuples to the result
+        for (auto &tuple: tuples) {
+            // Create a new tuple with just the columns we want
+            vector<string> newValues;
+            for (auto &index: indexes) {
+                newValues.push_back(tuple.at(index));
+            }
+            Tuple newTuple(newValues);
+            result.addTuple(newTuple);
+        }
+        return result;
+    };
 
 
     // Rename - Will take in a scheme and rename the columns of the relation
     // Create a new scheme where we've changed the names of the columns
     // Add back in the same tuples into a relation with the new scheme
     // Then return that new relation
+    Relation rename(const Scheme &newScheme) const {
+        Relation result(name, newScheme);
+        // TODO: change the names of the columns
+        for (auto &tuple: tuples) {
+            result.addTuple(tuple);
+        }
+        return result;
+    };
 
 
     // Evaluate predicate - Mark for Project and Rename
@@ -81,5 +117,10 @@ public:
     // Keeping track of the first time we see each variable prepares us for Project and Rename, plus type-2 selects.
     // Project each column that we have saved (not in alphabetical order)
     // Rename columns to their corresponding variable names
+    Relation evaluatePredicate(const Predicate &predicate) const {
+        Relation result(name, scheme);
+        // TODO
+        return result;
+    };
 };
 #endif //CS236PROJECT3_RELATIONALDATABASE_RELATION_H

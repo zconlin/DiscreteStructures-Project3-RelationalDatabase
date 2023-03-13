@@ -1,5 +1,5 @@
 //
-// Created by zacco on 3/10/2023.
+// Created by zconlin on 3/10/2023.
 //
 
 #ifndef CS236PROJECT3_RELATIONALDATABASE_INTERPRETER_H
@@ -7,6 +7,7 @@
 
 #include "Database.h"
 #include "parser.h"
+#include "Predicate.h"
 
 class Interpreter {
     // Takes a DatalogProgram (the vectors of schemes, facts, rules, and queries)
@@ -20,6 +21,19 @@ class Interpreter {
         //      Make a Relation for each scheme-Predicate, and put that Relation in the Database data member
         //      Make a Tuple for each fact-Predicate, and put that Tuple in the appropriate Relation in the Database
 
+    Relation Interpreter::evaluateQuery(Predicate query) {
+        Relation relation = db.relations[query.getName()];
+        for (auto &parameter : query.getParameterList()) {
+            if (parameter.isID) {
+                relation = relation.select(parameter.value);
+            }
+            else {
+                relation = relation.select(parameter.value, parameter.value);
+            }
+        }
+        return relation;
+    }
+
     // Input comes from turning a scheme predicate into a scheme object, and
     // turning a fact predicate into a tuple object
     // Predicates come from the DatalogProgram
@@ -30,10 +44,17 @@ class Interpreter {
     string checkForConstant() {
         // test if the first character is a ', if it is then that makes it a constant,
         // if not it is a variable
+        // OR test if isID is true?
     }
+
 public:
         Interpreter(){}
         ~Interpreter(){}
+
+    Interpreter::Interpreter(DatalogProgram dl) {
+        this->dl = dl;
+        db = Database(dl.Schemes, dl.Facts);
+    }
 };
 
 #endif //CS236PROJECT3_RELATIONALDATABASE_INTERPRETER_H
