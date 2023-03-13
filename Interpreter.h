@@ -21,14 +21,15 @@ class Interpreter {
         //      Make a Relation for each scheme-Predicate, and put that Relation in the Database data member
         //      Make a Tuple for each fact-Predicate, and put that Tuple in the appropriate Relation in the Database
 
-    Relation Interpreter::evaluateQuery(Predicate query) {
+    Relation evaluateQuery(Predicate query) {
         Relation relation = db.relations[query.getName()];
         for (auto &parameter : query.getParameterList()) {
             if (parameter.isID) {
-                relation = relation.select(parameter.value);
+                relation = relation.select(parameter.isID,parameter.value);
             }
             else {
-                relation = relation.select(parameter.value, parameter.value);
+                relation = relation.matchSelect(parameter.isID,parameter.value);
+                // TODO: isID as the first argument is not right, I need an index value
             }
         }
         return relation;
@@ -41,17 +42,19 @@ class Interpreter {
     // Store that in the database
 
 
-    string checkForConstant() {
-        // test if the first character is a ', if it is then that makes it a constant,
-        // if not it is a variable
-        // OR test if isID is true?
-    }
+//    string checkForConstant() { // I think I do this already with isID
+//        // test if the first character is a ', if it is then that makes it a constant,
+//        // if not it is a variable
+//    }
 
 public:
-        Interpreter(){}
-        ~Interpreter(){}
+    Interpreter(){}
+    ~Interpreter(){}
 
-    Interpreter::Interpreter(DatalogProgram dl) {
+    DatalogProgram dl;
+    Database db;
+
+    Interpreter (DatalogProgram dl) {
         this->dl = dl;
         db = Database(dl.Schemes, dl.Facts);
     }

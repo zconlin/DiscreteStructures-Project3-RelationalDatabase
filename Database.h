@@ -10,6 +10,7 @@
 #include "Interpreter.h"
 
 class Database {
+public:
     Database(){}
     ~Database(){}
 

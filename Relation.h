@@ -60,9 +60,14 @@ public:
     };
 
     // Select type 2 - Passing in a variable (Author=Editor) - Only happens if you find a duplicate variable
-    Relation matchSelect(int index, const string &value) const {
+    Relation matchSelect(int index, int secondIndex) const {
         Relation result(name, scheme);
-        // TODO
+        // Add tuples to the result if they meet the condition
+        for (auto &tuple: tuples) {
+            if (tuple.at(index) == tuple.at(secondIndex)) {
+                result.addTuple(tuple);
+            }
+        }
         return result;
     };
 
