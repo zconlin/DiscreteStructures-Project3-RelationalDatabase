@@ -1,4 +1,4 @@
- //
+//
 // Created by zconlin on 3/3/2023.
 //
 
@@ -24,13 +24,11 @@
 // Schemes and Tuples are related to each other by position. The name at a given position in the Scheme corresponds to the value at that same position in the Tuple. In the example above, 'Major' is at index 2 in the Scheme. The value for 'Major' in the Tuple is 'CS' because it is at index 2 in the Tuple.
 
 class Relation {
-private:
+public:
     string name;
     Scheme scheme;
     set<Tuple> tuples;
 
-
-public:
     Relation() = default;
     Relation(const string &name, const Scheme &scheme)
             : name(name), scheme(scheme) {}
@@ -75,26 +73,27 @@ public:
     // Will take in a vector of indexes and return a new relation with only those columns
     // As we go through the tuples, make a new tuple with just those columns,
     // and that new tuple is what we add to the relation
-    Relation project(const vector<int> &indexes) const {
+    Relation project(const Scheme &projection) const {
         // Create a new scheme with the new column names
-        vector<string> newNames;
-        for (auto &index: indexes) {
-            newNames.push_back(scheme.at(index));
-        }
-        Scheme newScheme(newNames);
+        Relation result(name, projection);
+        vector<int> mapping;
 
-        // Create a new relation with the new scheme
-        Relation result(name, newScheme);
-
-        // Add tuples to the result
-        for (auto &tuple: tuples) {
-            // Create a new tuple with just the columns we want
-            vector<string> newValues;
-            for (auto &index: indexes) {
-                newValues.push_back(tuple.at(index));
+        for (auto &newHeader: projection) {
+            int i = 0;
+            for (auto &header: scheme) {
+                if (newHeader == header) {
+                    mapping.push_back(i);
+                    break;
+                }
+                i++;
             }
-            Tuple newTuple(newValues);
-            result.addTuple(newTuple);
+            for (auto &tuple: tuples) {
+                vector<string> newString;
+                for (auto &index: mapping) {
+                    newString.push_back(tuple.at(index));
+                }
+                result.addTuple(newString);
+            }
         }
         return result;
     };
@@ -106,12 +105,20 @@ public:
     // Then return that new relation
     Relation rename(const Scheme &newScheme) const {
         Relation result(name, newScheme);
-        // TODO: change the names of the columns
-        for (auto &tuple: tuples) {
-            result.addTuple(tuple);
-        }
+        result.addTuples(tuples);
         return result;
+//        this->scheme.setName(index,value);
+//        Relation result(name, scheme);
+//        return result;
     };
+
+    void addTuples(const set<Tuple> &t) {
+        this->tuples.insert(t.begin(), t.end());
+    }
+
+    set <Tuple> &getTuples() {
+        return tuples;
+    }
 
 
     // Evaluate predicate - Mark for Project and Rename
@@ -122,10 +129,11 @@ public:
     // Keeping track of the first time we see each variable prepares us for Project and Rename, plus type-2 selects.
     // Project each column that we have saved (not in alphabetical order)
     // Rename columns to their corresponding variable names
-    Relation evaluatePredicate(const Predicate &predicate) const {
-        Relation result(name, scheme);
-        // TODO
-        return result;
-    };
+//    Relation evaluatePredicate(const Predicate &predicate) const {
+//        Relation result(name, scheme);
+//        return result;
+//    };
 };
+
+//};
 #endif //CS236PROJECT3_RELATIONALDATABASE_RELATION_H

@@ -27,17 +27,41 @@ int main (int argc, char* argv[]) {
         DatalogProgram dp = p.datalogProgram();
         Interpreter i = Interpreter(dp);
 
-//        i.evaluateQuery(d.getQueryList()
-        cout << "Success!" << endl;
-        dp.toString();
+        i.evaluateAllQueries();
     }
     catch (Token error) {
         cout << "Failure!" << endl;
         cout << "  " << error.toString() << endl;
     }
-
     return 0;
 }
+
+//int main (int argc, char* argv[]) { // Save
+//    ifstream f;
+//    f.open(argv[1]);
+//
+//    string content((istreambuf_iterator<char>(f)), (istreambuf_iterator<char>()));
+//
+//    Scanner s = Scanner(content);
+//    vector<Token> t = s.scanLoop();
+//
+//    Parser p = Parser(t);
+//
+//    try {
+//        DatalogProgram dp = p.datalogProgram();
+//        Interpreter i = Interpreter(dp);
+//
+////        i.evaluateQuery(d.getQueryList()
+////        cout << "Success!" << endl;
+//        dp.toString();
+//    }
+//    catch (Token error) {
+//        cout << "Failure!" << endl;
+//        cout << "  " << error.toString() << endl;
+//    }
+//
+//    return 0;
+//}
 
 //int main() { // Part 3
 //    // The result of the select should only include tuples where the 'Major' is 'CS'.

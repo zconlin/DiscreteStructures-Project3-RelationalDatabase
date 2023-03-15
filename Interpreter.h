@@ -10,54 +10,73 @@
 #include "Predicate.h"
 
 class Interpreter {
-    // Takes a DatalogProgram (the vectors of schemes, facts, rules, and queries)
-    // Stores the DatalogProgram as a data member
-    // Makes a Database using the schemes and the facts, and stores it as a data member
-    // Will evaluate the queries in Part B and the rules in project 4
+public:
+    Interpreter(){}
 
-    // Interpreter pseudocode:
-        // Input: DatalogProgram
-        //      Store the DatalogProgram as a data member
-        //      Make a Relation for each scheme-Predicate, and put that Relation in the Database data member
-        //      Make a Tuple for each fact-Predicate, and put that Tuple in the appropriate Relation in the Database
-
-    Relation evaluateQuery(Predicate query) {
-        Relation relation = db.relations[query.getName()];
-        for (auto &parameter : query.getParameterList()) {
-            if (parameter.isID) {
-                relation = relation.select(parameter.isID,parameter.value);
-            }
-            else {
-                relation = relation.matchSelect(parameter.isID,parameter.value);
-                // TODO: isID as the first argument is not right, I need an index value
-            }
-        }
-        return relation;
+    Interpreter(const DatalogProgram &program) : dl(program) {
+        db = Database(program.Schemes, program.Facts);
     }
 
-    // Input comes from turning a scheme predicate into a scheme object, and
-    // turning a fact predicate into a tuple object
-    // Predicates come from the DatalogProgram
-    // Interpreter will take in those predicates and make a scheme or tuple from that predicate
-    // Store that in the database
+    ~Interpreter(){}
 
+    DatalogProgram dl;
+    Database db;
+
+    Relation evaluateQuery(Predicate &predicate) {
+        Relation rel = db.relations[predicate.getName()];
+        map<string, int> mapping;
+        vector<string> ordering;
+        Relation result = Relation(rel);
+        int index = 0;
+        for (auto &p: predicate.parameterList) {
+            if (!p.isID) {
+                result = result.select(index, p.value);
+            } else {
+                if (mapping.count(p.value)) {
+                    int baselineIndex = mapping[p.value];
+                    result = result.matchSelect(baselineIndex, index);
+                } else {
+                    ordering.push_back(p.value);
+                    mapping[p.value] = index;
+                }
+            }
+            ++index;
+        }
+        cout << predicate.toString() << "? ";
+
+        if (result.getTuples().empty()) {
+            cout << "No" << endl;
+        } else {
+            if (!ordering.empty()) {
+                Scheme returnScheme = Scheme();
+                for (auto &item: ordering) {
+                    returnScheme.push_back(rel.scheme.at(mapping[item]));
+                }
+                result = result.project(returnScheme);
+                result = result.rename(Scheme(ordering));
+                cout << "Yes(" << result.getTuples().size() << ")" << endl;
+                cout << result.toString() << endl;
+            } else {
+                cout << "Yes(" << result.getTuples().size() << ")" << endl;
+            }
+        }
+        return result;
+    }
+
+    void evaluateAllQueries() {
+        for (auto &query : dl.Queries) {
+            evaluateQuery(query);
+        }
+    }
 
 //    string checkForConstant() { // I think I do this already with isID
 //        // test if the first character is a ', if it is then that makes it a constant,
 //        // if not it is a variable
 //    }
 
-public:
-    Interpreter(){}
-    ~Interpreter(){}
-
-    DatalogProgram dl;
-    Database db;
-
-    Interpreter (DatalogProgram dl) {
-        this->dl = dl;
-        db = Database(dl.Schemes, dl.Facts);
-    }
+//    Interpreter (const DatalogProgram &dl) : dl(dl) {
+//
+//    }
 };
 
 #endif //CS236PROJECT3_RELATIONALDATABASE_INTERPRETER_H
