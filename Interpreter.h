@@ -55,7 +55,7 @@ public:
                 result = result.project(returnScheme);
                 result = result.rename(Scheme(ordering));
                 cout << "Yes(" << result.getTuples().size() << ")" << endl;
-                cout << result.toString() << endl;
+                cout << result.toString();
             } else {
                 cout << "Yes(" << result.getTuples().size() << ")" << endl;
             }
