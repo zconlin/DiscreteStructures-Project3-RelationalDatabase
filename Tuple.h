@@ -13,13 +13,13 @@ public:
     Tuple(vector<string> values) : vector<string>(values) { }
 
     string toString(const Scheme& scheme) const {
-    Tuple values = Tuple(*this);
+        Tuple values = Tuple(*this);
         stringstream out;
 
         string save = values.back();
         values.pop_back();
 
-        for (unsigned int i = 0; i < scheme.size(); ++i) {
+        for (unsigned int i = 0; i < values.size(); ++i) {
             out << "  " << scheme.at(i);
             out << "=";
             out << values.at(i);
