@@ -30,8 +30,8 @@ int main (int argc, char* argv[]) {
         i.evaluateAllQueries();
     }
     catch (Token error) {
-        cout << "Failure!" << endl;
-        cout << "  " << error.toString() << endl;
+//        cout << "Failure!" << endl;
+//        cout << "  " << error.toString() << endl;
     }
     return 0;
 }

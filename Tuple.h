@@ -19,8 +19,9 @@ public:
         string save = values.back();
         values.pop_back();
 
+        out << "  ";
         for (unsigned int i = 0; i < values.size(); ++i) {
-            out << "  " << scheme.at(i);
+            out << scheme.at(i);
             out << "=";
             out << values.at(i);
 //            if (i < scheme.size() - 1) {

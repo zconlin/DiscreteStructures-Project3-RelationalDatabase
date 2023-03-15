@@ -87,13 +87,13 @@ public:
                 }
                 i++;
             }
-            for (auto &tuple: tuples) {
-                vector<string> newString;
-                for (auto &index: mapping) {
-                    newString.push_back(tuple.at(index));
-                }
-                result.addTuple(newString);
+        }
+        for (auto &tuple: tuples) {
+            vector<string> newString;
+            for (auto &index: mapping) {
+                newString.push_back(tuple.at(index));
             }
+            result.addTuple(newString);
         }
         return result;
     };
